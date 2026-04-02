@@ -7,6 +7,7 @@ import { ChartColumnBigIcon } from 'lucide-react';
 import { ClerkProvider, Show, SignInButton, SignUpButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import UserDropdown from './user-dropdown';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -49,6 +50,7 @@ export default function RootLayout({
             </div>
           </nav>
           {children}
+          <Toaster />
         </ClerkProvider>
       </body>
     </html>

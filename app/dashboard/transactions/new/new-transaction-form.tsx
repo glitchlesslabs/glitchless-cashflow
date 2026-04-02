@@ -7,6 +7,7 @@ import { type Category } from '@/types/Category';
 import z from 'zod';
 import { createTransaction } from './actions';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 export default function NewTransactionForm({
   categories,
@@ -20,6 +21,14 @@ export default function NewTransactionForm({
       categoryId: data.categoryId,
       description: data.description,
     });
+
+    if (result.error) {
+      toast('Error', {
+        description: result.message,
+      });
+    }
+
+    console.log(result.id);
   };
   return <TransactionForm onSubmit={handleSubmit} categories={categories} />;
 }

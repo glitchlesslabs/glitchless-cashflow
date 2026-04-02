@@ -56,7 +56,10 @@ export default function TransactionForm({ categories, onSubmit }: Props) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <fieldset className="grid grid-cols-2 gap-y-5 gap-x-2">
+      <fieldset
+        disabled={form.formState.isSubmitting}
+        className="grid grid-cols-2 gap-y-5 gap-x-2"
+      >
         <Controller
           name="transactionType"
           control={form.control}
@@ -166,7 +169,10 @@ export default function TransactionForm({ categories, onSubmit }: Props) {
           )}
         />
       </fieldset>
-      <fieldset className="mt-5 flex flex-col gap-5">
+      <fieldset
+        disabled={form.formState.isSubmitting}
+        className="mt-5 flex flex-col gap-5"
+      >
         <Controller
           name="description"
           control={form.control}
