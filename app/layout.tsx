@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ChartColumnBigIcon } from 'lucide-react';
 import { ClerkProvider, Show, SignInButton, SignUpButton } from '@clerk/nextjs';
+import { Button } from '@/components/ui/button';
+import UserDropdown from './user-dropdown';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -33,9 +35,16 @@ export default function RootLayout({
             <div>
               <Show when="signed-out">
                 <div className="flex items-center">
-                  <SignInButton />
-                  <SignUpButton />
+                  <Button asChild variant="link" className="text-white">
+                    <SignInButton />
+                  </Button>
+                  <Button asChild variant="link" className="text-white">
+                    <SignUpButton />
+                  </Button>
                 </div>
+              </Show>
+              <Show when="signed-in">
+                <UserDropdown />
               </Show>
             </div>
           </nav>
