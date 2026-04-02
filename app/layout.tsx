@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ChartColumnBigIcon } from 'lucide-react';
+import { ClerkProvider, Show, SignInButton, SignUpButton } from '@clerk/nextjs';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -20,14 +21,26 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn('h-full', 'antialiased', inter.variable)}>
       <body className="min-h-full flex flex-col">
-        <nav className="bg-primary p-4 text-white h-20 flex items-center justify-between">
-          <Link href="/" className="font-bold text-2xl flex gap-1 items-center">
-            <ChartColumnBigIcon className="text-lime-500" /> Glitchless Cash
-            Flow
-          </Link>
-          <div>auth button</div>
-        </nav>
-        {children}
+        <ClerkProvider>
+          <nav className="bg-primary p-4 text-white h-20 flex items-center justify-between">
+            <Link
+              href="/"
+              className="font-bold text-2xl flex gap-1 items-center"
+            >
+              <ChartColumnBigIcon className="text-lime-500" /> Glitchless Cash
+              Flow
+            </Link>
+            <div>
+              <Show when="signed-out">
+                <div className="flex items-center">
+                  <SignInButton />
+                  <SignUpButton />
+                </div>
+              </Show>
+            </div>
+          </nav>
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
