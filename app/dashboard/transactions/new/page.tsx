@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import TransactionForm from '@/components/transaction-form';
 
 export default function NewTransactionPage() {
   return (
@@ -35,7 +36,9 @@ export default function NewTransactionPage() {
         <CardHeader>
           <CardTitle>New Transaction</CardTitle>
         </CardHeader>
-        <CardContent>new transaction form</CardContent>
+        <CardContent>
+          <TransactionForm />
+        </CardContent>
       </Card>
     </div>
   );
