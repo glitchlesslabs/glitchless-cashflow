@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import TransactionForm from '@/components/transaction-form';
 import { getCategories } from '@/data/getCategories';
+import NewTransactionForm from './new-transaction-form';
 
 export default async function NewTransactionPage() {
   const categories = await getCategories();
@@ -40,7 +41,7 @@ export default async function NewTransactionPage() {
           <CardTitle>New Transaction</CardTitle>
         </CardHeader>
         <CardContent>
-          <TransactionForm categories={categories} />
+          <NewTransactionForm categories={categories} />
         </CardContent>
       </Card>
     </div>

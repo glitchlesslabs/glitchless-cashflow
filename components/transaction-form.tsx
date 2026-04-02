@@ -20,7 +20,7 @@ import { CalendarIcon } from 'lucide-react';
 import { Input } from './ui/input';
 import { type Category } from '@/types/Category';
 
-const transactionFormSchema = z.object({
+export const transactionFormSchema = z.object({
   transactionType: z.enum(['income', 'expense']),
   categoryId: z.coerce.number().positive('Please select a category'),
   transactionDate: z.coerce
@@ -33,11 +33,12 @@ const transactionFormSchema = z.object({
     .max(300, 'Description must contain a maximum of 300 characters'),
 });
 
-export default function TransactionForm({
-  categories,
-}: {
+type Props = {
   categories: Category[];
-}) {
+  onSubmit: (data: z.infer<typeof transactionFormSchema>) => Promise<void>;
+};
+
+export default function TransactionForm({ categories, onSubmit }: Props) {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: standardSchemaResolver(transactionFormSchema),
     defaultValues: {
@@ -48,18 +49,13 @@ export default function TransactionForm({
       transactionType: 'income',
     },
   });
-
-  const handleSubmit = async (data: z.infer<typeof transactionFormSchema>) => {
-    console.log({ data });
-  };
-
   const transactionType = form.watch('transactionType');
   const filteredCategories = categories.filter(
     (category) => category.type === transactionType,
   );
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <fieldset className="grid grid-cols-2 gap-y-5 gap-x-2">
         <Controller
           name="transactionType"
