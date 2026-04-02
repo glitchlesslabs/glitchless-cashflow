@@ -18,6 +18,7 @@ import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { Input } from './ui/input';
+import { type Category } from '@/types/Category';
 
 const transactionFormSchema = z.object({
   transactionType: z.enum(['income', 'expense']),
@@ -32,7 +33,11 @@ const transactionFormSchema = z.object({
     .max(300, 'Description must contain a maximum of 300 characters'),
 });
 
-export default function TransactionForm() {
+export default function TransactionForm({
+  categories,
+}: {
+  categories: Category[];
+}) {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: standardSchemaResolver(transactionFormSchema),
     defaultValues: {
@@ -48,6 +53,11 @@ export default function TransactionForm() {
     console.log({ data });
   };
 
+  const transactionType = form.watch('transactionType');
+  const filteredCategories = categories.filter(
+    (category) => category.type === transactionType,
+  );
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <fieldset className="grid grid-cols-2 gap-y-5 gap-x-2">
@@ -57,7 +67,13 @@ export default function TransactionForm() {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Transaction Type</FieldLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                onValueChange={(newValue) => {
+                  field.onChange(newValue);
+                  form.setValue('categoryId', 0);
+                }}
+                value={field.value}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -83,7 +99,18 @@ export default function TransactionForm() {
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent></SelectContent>
+                <SelectContent>
+                  {filteredCategories.map((category) => {
+                    return (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
               </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

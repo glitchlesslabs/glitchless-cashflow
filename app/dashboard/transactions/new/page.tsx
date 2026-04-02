@@ -9,8 +9,11 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import TransactionForm from '@/components/transaction-form';
+import { getCategories } from '@/data/getCategories';
 
-export default function NewTransactionPage() {
+export default async function NewTransactionPage() {
+  const categories = await getCategories();
+  console.log({ categories });
   return (
     <div className="max-w-7xl w-full mx-auto py-10">
       <Breadcrumb>
@@ -37,7 +40,7 @@ export default function NewTransactionPage() {
           <CardTitle>New Transaction</CardTitle>
         </CardHeader>
         <CardContent>
-          <TransactionForm />
+          <TransactionForm categories={categories} />
         </CardContent>
       </Card>
     </div>
