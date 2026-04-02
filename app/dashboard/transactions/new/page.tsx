@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import TransactionForm from '@/components/transaction-form';
 import { getCategories } from '@/data/getCategories';
 import NewTransactionForm from './new-transaction-form';
 
