@@ -1,6 +1,6 @@
 'use client';
 
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { Controller, useForm } from 'react-hook-form';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { z } from 'zod';
@@ -12,6 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Calendar } from './ui/calendar';
+import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
+import { CalendarIcon } from 'lucide-react';
+import { Input } from './ui/input';
 
 const transactionFormSchema = z.object({
   transactionType: z.enum(['income', 'expense']),
@@ -38,9 +44,9 @@ export default function TransactionForm() {
     },
   });
 
-  const handleSubmit = async (
-    data: z.infer<typeof transactionFormSchema>,
-  ) => {};
+  const handleSubmit = async (data: z.infer<typeof transactionFormSchema>) => {
+    console.log({ data });
+  };
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -83,6 +89,73 @@ export default function TransactionForm() {
             </Field>
           )}
         />
+        <Controller
+          name="transactionDate"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="transaction-date">
+                Transaction Date
+              </FieldLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="transaction-date"
+                    className={cn(
+                      'justify-start text-left font-normal',
+                      !field.value && 'text-muted-foreground',
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {field.value ? (
+                      format(field.value, 'PPP')
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    initialFocus
+                    disabled={{
+                      after: new Date(),
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="amount"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Amount</FieldLabel>
+              <Input type="number" {...field} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+      </fieldset>
+      <fieldset className="mt-5 flex flex-col gap-5">
+        <Controller
+          name="description"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Description</FieldLabel>
+              <Input {...field} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Button type="submit">Submit</Button>
       </fieldset>
     </form>
   );
