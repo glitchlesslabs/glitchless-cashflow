@@ -129,7 +129,7 @@ export default async function TransactionsPage({
                           aria-label="Edit transaction"
                         >
                           <Link
-                            href={`/dashboard/transaction/${transaction.id}`}
+                            href={`/dashboard/transactions/${transaction.id}`}
                           >
                             <PencilIcon />
                           </Link>
