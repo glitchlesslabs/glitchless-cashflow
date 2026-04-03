@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/table';
 import { PencilIcon } from 'lucide-react';
 import numeral from 'numeral';
+import { Badge } from '@/components/ui/badge';
 
 const today = new Date();
 const searchSchema = z.object({
@@ -100,8 +101,18 @@ export default async function TransactionsPage({
                         {format(transaction.transactionDate, 'do MMM yyyy')}
                       </TableCell>
                       <TableCell>{transaction.description}</TableCell>
-                      <TableCell>{transaction.categoryId}</TableCell>
-                      <TableCell>{transaction.categoryId}</TableCell>
+                      <TableCell>
+                        <Badge
+                          className={
+                            transaction.transactionType === 'income'
+                              ? 'bg-lime-500'
+                              : 'bg-orange-500'
+                          }
+                        >
+                          {transaction.transactionType}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{transaction.category}</TableCell>
                       <TableCell>
                         £{numeral(transaction.amount).format('0,0[.]00')}
                       </TableCell>
