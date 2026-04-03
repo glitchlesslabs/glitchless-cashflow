@@ -1,8 +1,8 @@
+import 'server-only';
 import { db } from '@/db';
 import { transactionsTable } from '@/db/schema';
 import { auth } from '@clerk/nextjs/server';
 import { asc, eq } from 'drizzle-orm';
-import 'server-only';
 
 export async function getTransactionYearsRange() {
   const { userId } = await auth();
