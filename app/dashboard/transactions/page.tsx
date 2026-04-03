@@ -23,6 +23,8 @@ import {
 import { PencilIcon } from 'lucide-react';
 import numeral from 'numeral';
 import { Badge } from '@/components/ui/badge';
+import Filters from './filters';
+import { getTransactionYearsRange } from '@/data/getTransactionYearsRange';
 
 const today = new Date();
 const searchSchema = z.object({
@@ -47,6 +49,7 @@ export default async function TransactionsPage({
   const { month, year } = searchSchema.parse(searchParamsValues);
   const selectedDate = new Date(year, month - 1, 1);
   const transactions = await getTransactionsByMonth({ month, year });
+  const yearsRange = await getTransactionYearsRange();
 
   console.log({ transactions });
 
@@ -69,7 +72,9 @@ export default async function TransactionsPage({
         <CardHeader>
           <CardTitle className="flex justify-between">
             <span>{format(selectedDate, 'MMM yyyy')} Transactions</span>
-            <div>dropdowns</div>
+            <div>
+              <Filters year={year} month={month} yearsRange={yearsRange} />
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
