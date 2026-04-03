@@ -12,6 +12,16 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import z from 'zod';
 import { getTransactionsByMonth } from '@/data/getTransactionsByMonth';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { PencilIcon } from 'lucide-react';
+import numeral from 'numeral';
 
 const today = new Date();
 const searchSchema = z.object({
@@ -65,6 +75,56 @@ export default async function TransactionsPage({
           <Button asChild>
             <Link href="/dashboard/transactions/new">New Transaction</Link>
           </Button>
+          {!transactions?.length && (
+            <p className="text-center py-10 text-lg text-muted-foreground">
+              There are no transactions for this month
+            </p>
+          )}
+          {!!transactions?.length && (
+            <Table className="mt-4">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((transaction) => {
+                  return (
+                    <TableRow key={transaction.id}>
+                      <TableCell>
+                        {format(transaction.transactionDate, 'do MMM yyyy')}
+                      </TableCell>
+                      <TableCell>{transaction.description}</TableCell>
+                      <TableCell>{transaction.categoryId}</TableCell>
+                      <TableCell>{transaction.categoryId}</TableCell>
+                      <TableCell>
+                        £{numeral(transaction.amount).format('0,0[.]00')}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="outline"
+                          asChild
+                          size="icon"
+                          aria-label="Edit transaction"
+                        >
+                          <Link
+                            href={`/dashboard/transaction/${transaction.id}`}
+                          >
+                            <PencilIcon />
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>
