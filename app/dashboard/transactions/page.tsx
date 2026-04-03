@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import z from 'zod';
+import { getTransactionsByMonth } from '@/data/getTransactionsByMonth';
 
 const today = new Date();
 const searchSchema = z.object({
@@ -34,6 +35,9 @@ export default async function TransactionsPage({
   const searchParamsValues = await searchParams;
   const { month, year } = searchSchema.parse(searchParamsValues);
   const selectedDate = new Date(year, month - 1, 1);
+  const transactions = await getTransactionsByMonth({ month, year });
+
+  console.log({ transactions });
 
   return (
     <div className="max-w-7xl w-full mx-auto py-10">
