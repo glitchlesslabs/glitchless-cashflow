@@ -34,43 +34,22 @@ export default async function EditTransactionPage({
   }
 
   return (
-    <div className="max-w-7xl w-full mx-auto py-10">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/dashboard/transactions">Transactions</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Edit Transaction</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <Card className="mt-4 max-w-3xl">
-        <CardHeader>
-          <CardTitle className="flex justify-between">
-            <span>Edit Transaction</span>
-            <DeleteTransactionDialog
-              transactionId={transaction.id}
-              transactionDate={transaction.transactionDate}
-            />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <EditTransactionForm
-            categories={categories}
-            transaction={transaction}
+    <Card className="mt-4 max-w-3xl">
+      <CardHeader>
+        <CardTitle className="flex justify-between">
+          <span>Edit Transaction</span>
+          <DeleteTransactionDialog
+            transactionId={transaction.id}
+            transactionDate={transaction.transactionDate}
           />
-        </CardContent>
-      </Card>
-    </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <EditTransactionForm
+          categories={categories}
+          transaction={transaction}
+        />
+      </CardContent>
+    </Card>
   );
 }
