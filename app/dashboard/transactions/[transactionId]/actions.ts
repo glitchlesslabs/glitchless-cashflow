@@ -53,3 +53,23 @@ export async function updateTransaction(data: {
       ),
     );
 }
+
+export async function deleteTransaction(transactionId: number) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return {
+      error: true,
+      message: 'Unauthorized',
+    };
+  }
+
+  await db
+    .delete(transactionsTable)
+    .where(
+      and(
+        eq(transactionsTable.id, transactionId),
+        eq(transactionsTable.userId, userId),
+      ),
+    );
+}
