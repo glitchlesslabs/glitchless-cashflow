@@ -4,13 +4,22 @@ import { db } from '@/db';
 import { transactionsTable } from '@/db/schema';
 import { transactionSchema } from '@/validation/transactionSchema';
 import { auth } from '@clerk/nextjs/server';
+import { and, eq } from 'drizzle-orm';
+import z from 'zod';
 
-export const createTransaction = async (data: {
-  amount: number;
+const updateTransactionSchema = transactionSchema.and(
+  z.object({
+    id: z.number(),
+  }),
+);
+
+export async function updateTransaction(data: {
+  id: number;
   transactionDate: string;
   description: string;
+  amount: number;
   categoryId: number;
-}) => {
+}) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -20,7 +29,7 @@ export const createTransaction = async (data: {
     };
   }
 
-  const validation = transactionSchema.safeParse(data);
+  const validation = updateTransactionSchema.safeParse(data);
 
   if (!validation.success) {
     return {
@@ -29,16 +38,18 @@ export const createTransaction = async (data: {
     };
   }
 
-  const [transaction] = await db
-    .insert(transactionsTable)
-    .values({
-      userId,
-      amount: data.amount.toString(),
+  await db
+    .update(transactionsTable)
+    .set({
       description: data.description,
-      categoryId: data.categoryId,
+      amount: data.amount.toString(),
       transactionDate: data.transactionDate,
+      categoryId: data.categoryId,
     })
-    .returning();
-
-  return { id: transaction.id };
-};
+    .where(
+      and(
+        eq(transactionsTable.id, data.id),
+        eq(transactionsTable.userId, userId),
+      ),
+    );
+}
