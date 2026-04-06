@@ -1,8 +1,8 @@
 'use client';
 
 import { addDays, format } from 'date-fns';
-import { Controller, useForm } from 'react-hook-form';
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
+import { Controller, useForm, type Resolver } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Field, FieldError, FieldLabel } from './ui/field';
 import {
@@ -51,7 +51,9 @@ export default function TransactionForm({
   defaultValues,
 }: Props) {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
-    resolver: standardSchemaResolver(transactionFormSchema),
+    resolver: zodResolver(transactionFormSchema) as Resolver<
+      z.infer<typeof transactionFormSchema>
+    >,
     defaultValues: {
       amount: 0,
       categoryId: 0,
