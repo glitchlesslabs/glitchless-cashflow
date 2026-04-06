@@ -15,8 +15,7 @@ import Link from 'next/link';
 import numeral from 'numeral';
 
 export default async function RecentTransactions() {
-  const recentTransactions = await getRecentTransactions();
-  console.log({ recentTransactions });
+  const transactions = await getRecentTransactions();
   return (
     <Card>
       <CardHeader>
@@ -33,12 +32,13 @@ export default async function RecentTransactions() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {!recentTransactions?.length && (
+        {!transactions?.length && (
           <p className="text-center py-10 text-lg text-muted-foreground">
-            There are no transactions for this month
+            You have no transactions yet. Start by hitting &ldquo;Create
+            New&ldquo; to create your first transaction
           </p>
         )}
-        {!!recentTransactions?.length && (
+        {!!transactions?.length && (
           <Table className="mt-4">
             <TableHeader>
               <TableRow>
@@ -50,7 +50,7 @@ export default async function RecentTransactions() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {recentTransactions.map((transaction) => {
+              {transactions.map((transaction) => {
                 return (
                   <TableRow key={transaction.id}>
                     <TableCell>
